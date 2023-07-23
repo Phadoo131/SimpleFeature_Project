@@ -3,15 +3,18 @@ ispost:
 
 createdb:
 	docker exec -it spostgres15 createdb --username=phadoo --owner=phadoo simple_bank
+	
+execdb:
+	docker exec -it spostgres15 psql -U phadoo -d simple_bank
 
 dropdb:
 	docker exec -it spostgres15 dropdb simple_bank	
 
 migrateup:
-	migrate -path db/migration -database "postgresql://phadoo:phadoosecret@localhost:5432/simple_bank?sslmode=disable" -verbose up
+	migrate -path simplebank/db/migration -database "postgresql://phadoo:phadoosecret@localhost:5432/simple_bank?sslmode=disable" -verbose up
 
 migratedown:
-	migrate -path db/migration -database "postgresql://phadoo:phadoosecret@localhost:5432/simple_bank?sslmode=disable" -verbose down
+	migrate -path simplebank/db/migration -database "postgresql://phadoo:phadoosecret@localhost:5432/simple_bank?sslmode=disable" -verbose down
 
 sqlc:
 	sqlc generate
@@ -19,4 +22,4 @@ sqlc:
 test:
 	go test -v -cover ./...
 
-.PHONY: ispost createdb dropdb migrateup migratedown sqlc
+.PHONY: ispost createdb dropdb migrateup migratedown sqlc execdb
